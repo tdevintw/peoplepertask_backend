@@ -32,7 +32,7 @@ if(!isset($_SESSION['valid_seesion'])){
             </a>
             <div id="menu">
                 <div id="home-container">
-                    <èa href="dashboard.php"><img src="images/material-symbols_home-rounded.svg" alt="Home">
+                    <a href="dashboard.php"><img src="images/material-symbols_home-rounded.svg" alt="Home">
                     </a>
                 </div>
                 <div class="menu-section">

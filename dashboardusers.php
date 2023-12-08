@@ -153,6 +153,8 @@ echo"<form class='d-flex nav_btn' role='search'>
                                 <a
                                     href="update.php?user_id=<?=$user['user_id']?>&user_name=<?=$user['user_name']?>&email=<?=$user['email']?>&other=<?=$user['other']?>&role=<?=$user['role']?>"><button
                                         type="button" class="btn btn-info">edit</button></a>
+
+                                        
                             </td>
                         </tr>
                         <?php endforeach;?>

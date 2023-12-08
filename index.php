@@ -6,6 +6,13 @@ if(isset($_SESSION['user_name'])){
 else{
     $GLOBALS['z']=0;
 }
+if(isset($_GET['msg'])){
+if($_GET['msg']=='you have already make a proposal to this project'){
+   echo " <script>alert('you have already make a proposal to this project')</script>";
+}else if($_GET['msg']=='message had been sent'){
+    echo " <script>alert('message had been sent')</script>";
+ }
+}
 ?>
 
 
@@ -165,14 +172,48 @@ if($result){
             <div class="filters-content">
                 <div class="row grid">
                     <?php foreach($fetch_projects as $fetch_project): ?>
-                    <div class="col-md-4 mb-4 all <?= $fetch_project['category_name']; ?> ">
-                        <div class="card">
+                    <div class="col-md-4 mb-4 all <?= $fetch_project['category_name']; ?> " >
+                        <div class="card" style="height:400px;">
                             <img src="images/devweb.png" class="card-img-top" alt="">
                             <div class="card-body">
                                 <h5 class="card-title"><?= $fetch_project['project_tittle'] ?></h5>
                                 <p class="card-text"><?= $fetch_project['descreption'] ?></p>
-                                <a href="#" class="btn btn-primary btn_projet">Details</a>
+                                <?php if(isset($_SESSION['role']) && $_SESSION['role']=='freelancer'){
+                                    echo "<a href='submit.php?project_id={$fetch_project['project_id']}' class='btn btn-primary btn_success'>make proposal</a>";
+                                    }
+                                    
+                                    ?>
+                                <a href="more.php" class="btn btn-primary btn_projet">Details</a>
                                 <strong><?= $fetch_project['price'] ?>$</strong>
+                                
+                                <?php
+                                    
+                                    $sql3 = "SELECT *  FROM `projects_tags`
+                                    INNER JOIN `tags` ON projects_tags.tag_id = tags.tag_id
+                                    WHERE `project_id` = {$fetch_project['project_id']};
+                                    ";
+                            
+                                    $result8 = mysqli_query($conn, $sql3);
+                            
+                                    if($result8){
+                                        $tags_buttons = mysqli_fetch_all($result8 , MYSQLI_ASSOC);
+                                    
+                                    } else {
+                                        $tags_buttons=[];
+                                    }
+                                    if(mysqli_num_rows($result8)>0){
+                                        echo "<div style='height:1px;background-color:black;margin-top:10px'></div>";
+                                    }
+                            
+                            ?> 
+                                <div class="tags">
+                                    <?php foreach( $tags_buttons as $tags_button): ?>
+                                    <button
+                                        style='width:100px;height:fit-content;margin-top:10px;font-size:10px;border-radius:15px;'
+                                        type="button"
+                                        class="btn btn-primary"><?= '#'.$tags_button['tag_name'] ?></button>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </div>
                     </div>

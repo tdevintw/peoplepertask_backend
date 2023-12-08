@@ -17,7 +17,7 @@ if (isset($_GET['deleteid'])) {
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
-        header("Location: clientdashboard.php?msg=PROJECT DELETED SUCCESSFULLY");
+        header("Location: dashboard.php?msg=PROJECT DELETED SUCCESSFULLY");
     } else {
         echo "Failed to delete PROJECT: " . mysqli_query_error();
     }

@@ -139,7 +139,9 @@ echo"<form class='d-flex nav_btn' role='search'>
                             <th>subcate_name</th>
                             <th>user_name</th>
                             <th>price</th>
+                            <th>freelancer</th>
                             <th>edit</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -152,12 +154,13 @@ echo"<form class='d-flex nav_btn' role='search'>
                             <td><?= $user['subcate_name']; ?></td>
                             <td><?= $user['user_name']; ?></td>
                             <td><?= $user['price']; ?></td>
+                            <td><?= $user['freelancer_id']; ?></td>
                             <td>
                                 <a href="deleteproject.php?deleteid=<?=$user['project_id']?>"><button type="button"
                                         class="btn btn-danger"
                                          >delete</button></a>
                                         <a
-                                        href="updateproject.php?project_id=<?=$user['project_id']?>&project_tittle=<?=$user['project_tittle']?>&descreption=<?=$user['descreption']?>&price=<?=$user['price']?>"
+                                        href="updateproject.php?project_id=<?=$user['project_id']?>"
                                          ><button
                                         type="button" class="btn btn-info">edit</button></a>
                             </td>

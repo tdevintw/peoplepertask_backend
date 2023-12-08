@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['valid_seesion_freelancer']) ){
+if(!isset($_SESSION['valid_seesion_client']) ){
     header("Location: sign.php");
     exit();
 }
@@ -10,8 +10,9 @@ if(!isset($_SESSION['valid_seesion_freelancer']) ){
 REQUIRE 'connection.php';
 
     $user_id = $_SESSION['user_id'];
+    $project_id = $_GET['project_id'];
     $sql = "SELECT * FROM `freelancer_requests` 
-    WHERE `freelancer_id` = '$user_id' AND  `status` = 'completed'" ;
+    WHERE `project_id` = '$project_id' ";
 
     $result = mysqli_query($conn, $sql);
 
@@ -20,11 +21,11 @@ REQUIRE 'connection.php';
     } else {
         $users=[];
     }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,11 +36,10 @@ REQUIRE 'connection.php';
 </head>
 
 <body>
-    <h1 style="text-align:center;margin-top:100px;">you have <span style="color:blue;"><?= mysqli_num_rows($result)?></span> accepted proposal</h1>
     <div class="row">
 
         <div class="col-12" id="column2">
-            <?php if($_SESSION['role']=='freelancer'){ echo"
+            <?php if($_SESSION['role']=='user'){ echo"
                                       <div id='table-container' style='margin:50px;'>
                                           <table id='userTable' class='table table-striped' style='width:100%'>
                                               <thead>
@@ -48,6 +48,7 @@ REQUIRE 'connection.php';
                                                       <th>project_id</th>
                                                       <th>freelance_id</th>
                                                       <th>message</th>
+                                                      <th>submit</th>
                                                   </tr>
                                               </thead>
                                               <tbody>";
@@ -58,6 +59,11 @@ REQUIRE 'connection.php';
                                                       <td>{$user['project_id']}</td>
                                                       <td>{$user['freelancer_id']}</td>
                                                       <td>{$user['message']}</td>
+                                                      <td>
+                                                          <a
+                                                              href='dashboard.php?request_id={$user['request_id']}&msg=accepted&freelancer_id={$user['freelancer_id']}&project_id={$user['project_id']}'><button
+                                                                  type='button' class='btn btn-info'>accept</button></a>
+                                                      </td>
                                                   </tr>
                                                   ";
                                                   endforeach;

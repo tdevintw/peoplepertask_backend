@@ -16,9 +16,15 @@ if(!$result){
     if(password_verify($password,$fetch['password'])){
         if( $fetch['role']=='admin'){
             $_SESSION['valid_seesion']=1;
+            $role=$fetch['role'];
+            $userid=$fetch['user_id'];
             $username = $fetch['user_name'];
             setcookie('user_name',$username,time()+60);
             $_SESSION['user_name']= $username;
+            setcookie('role',$role,time()+60);
+            $_SESSION['role']= $role;
+            setcookie('user_id',$userid,time()+60);
+            $_SESSION['user_id']=$userid;
             header("Location: dashboard.php?acces aceppted!!");
         }
         else{

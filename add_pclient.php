@@ -33,7 +33,7 @@ if(isset($_POST['submit'])){
 
     $result = mysqli_query($conn , $sql);
     if($result){
-        header("Location: clientdashboard.php?msg=NEW RECORD CREATED SUCCESFULY");
+        header("Location: dashboard.php?msg=NEW RECORD CREATED SUCCESFULY");
     } 
     else{
         echo "Failed" . mysqli_connect_error();
@@ -82,7 +82,7 @@ else{
             </a>
             <div id="menu">
                 <div id="home-container">
-                    <a href="clientdashboard.php"><img src="images/material-symbols_home-rounded.svg" alt="Home">
+                    <a href="dashboard.php"><img src="images/material-symbols_home-rounded.svg" alt="Home">
                     </a>
                 </div>
                 <div class="menu-section">

@@ -6,6 +6,13 @@ if(isset($_SESSION['user_name'])){
 else{
     $GLOBALS['z']=0;
 }
+if(isset($_GET['msg'])){
+if($_GET['msg']=='you have already make a proposal to this project'){
+   echo " <script>alert('you have already make a proposal to this project')</script>";
+}else if($_GET['msg']=='message had been sent'){
+    echo " <script>alert('message had been sent')</script>";
+ }
+}
 ?>
 
 
@@ -20,6 +27,34 @@ else{
     <link rel="stylesheet" href="css/header_footer.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <title>PeoplePerTask</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+    $("#form1").on("input", function() {
+        var value = $(this).val().toLowerCase();
+        
+        $(".card-body h5").each(function() {
+            var projectTitle = $(this).text().toLowerCase();
+            var shouldShow = projectTitle.indexOf(value) > -1;
+
+            // Show or hide the card based on the search result
+            var card = $(this).closest('.card');
+            card.toggle(shouldShow);
+
+            // Move the card to the top if it matches the search
+            if (shouldShow) {
+                card.parent().prepend(card);
+            }
+        });
+    });
+});
+
+    </script>
+    <style>
+        .col-md-4 {
+    transition: all 0.3s ease; /* Add a transition for smoother changes */
+}
+    </style>
 </head>
 
 <body>
@@ -132,18 +167,29 @@ if($result){
 ?>
     <section class="portfolio section">
         <div class="container">
-            <div class="top-side">
-                <h2 class="title">Categories Filter</h2>
+            <div class="input-group" style="justify-content:center;margin-bottom:50px">
+                <div class="form-outline" data-mdb-input-init>
+                    <input type="search" id="form1" class="form-control" placeholder="Search">
+                </div>
+                <button type="button" class="btn btn-primary" data-mdb-ripple-init>
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
+            <div style="display:flex;align-items:center;justify-content:center;">
+                <div class="top-side">
+                    <h4 style="font-size:15px" class="title">filter category by :</h4>
+                </div>
 
-            <div class="filters">
-                <ul>
-                    <li class="active" data-filter="*"> All</li>
-                    <?php foreach($fetch_categories as $fetch_category): ?>
-                    <li data-filter=".<?= $fetch_category['category_name'] ?>"><?= $fetch_category['category_name'] ?>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
+                <div class="filters">
+                    <ul>
+                        <li class="active" data-filter="*"> All</li>
+                        <?php foreach($fetch_categories as $fetch_category): ?>
+                        <li data-filter=".<?= $fetch_category['category_name'] ?>">
+                            <?= $fetch_category['category_name'] ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
             </div>
             <?php
             //php request for the loop of projects
@@ -166,13 +212,50 @@ if($result){
                 <div class="row grid">
                     <?php foreach($fetch_projects as $fetch_project): ?>
                     <div class="col-md-4 mb-4 all <?= $fetch_project['category_name']; ?> ">
-                        <div class="card">
+                        <div class="card" style="height:400px;">
                             <img src="images/devweb.png" class="card-img-top" alt="">
                             <div class="card-body">
-                                <h5 class="card-title"><?= $fetch_project['project_tittle'] ?></h5>
-                                <p class="card-text"><?= $fetch_project['descreption'] ?></p>
-                                <a href="#" class="btn btn-primary btn_projet">Details</a>
+                                <h5 id="tittle" class="card-title"><?= $fetch_project['project_tittle'] ?></h5>
+                                <p class="card-text"
+                                    style="max-width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                    <?= $fetch_project['descreption'] ?></p>
+                                <?php if(isset($_SESSION['role']) && $_SESSION['role']=='freelancer'){
+                                    echo "<a href='submit.php?project_id={$fetch_project['project_id']}' class='btn btn-primary btn_success'>make proposal</a>";
+                                    }
+                                    
+                                    ?>
+                                <a href="more.php?project_id=<?= $fetch_project['project_id']; ?>"
+                                    class="btn btn-primary btn_projet">Details</a>
                                 <strong><?= $fetch_project['price'] ?>$</strong>
+
+                                <?php
+                                    
+                                    $sql3 = "SELECT *  FROM `projects_tags`
+                                    INNER JOIN `tags` ON projects_tags.tag_id = tags.tag_id
+                                    WHERE `project_id` = {$fetch_project['project_id']};
+                                    ";
+                            
+                                    $result8 = mysqli_query($conn, $sql3);
+                            
+                                    if($result8){
+                                        $tags_buttons = mysqli_fetch_all($result8 , MYSQLI_ASSOC);
+                                    
+                                    } else {
+                                        $tags_buttons=[];
+                                    }
+                                    if(mysqli_num_rows($result8)>0){
+                                        echo "<div style='height:1px;background-color:black;margin-top:10px'></div>";
+                                    }
+                            
+                            ?>
+                                <div class="tags">
+                                    <?php foreach( $tags_buttons as $tags_button): ?>
+                                    <button
+                                        style='width:100px;height:fit-content;margin-top:10px;font-size:10px;border-radius:15px;'
+                                        type="button"
+                                        class="btn btn-primary"><?= '#'.$tags_button['tag_name'] ?></button>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </div>
                     </div>

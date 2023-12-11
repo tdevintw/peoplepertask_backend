@@ -39,15 +39,9 @@ if(!isset($_SESSION['valid_seesion'])){
         <p class="menu-paragraph">Users</p></a>
         </div>
         <div class="menu-section">
-                    <a href="stats.php"><img src="images/graph2 1.png" alt="Stats">
-                        <p class="menu-paragraph">Stats</p>
-                    </a>
-                </div>
-                <div class="menu-section">
-                    <a href="projects.php"><img src="images/project.png" alt="project">
-                        <p class="menu-paragraph">projects</p>
-                    </a>
-                </div>
+        <a href="stats.php"><img src="images/graph2 1.png" alt="Stats">
+        <p class="menu-paragraph">Stats</p></a>
+        </div>
         <div class="line">
         </div>
         <div class="menu-section">

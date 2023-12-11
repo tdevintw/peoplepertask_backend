@@ -43,14 +43,7 @@ if($result2){
 } else {
     $categories=[];
 }
-$sql3 = "SELECT `subcate_id` , `subcate_name` FROM `subcategories`";
-$result3 = mysqli_query($conn, $sql3);
-if(!$result3){
-    $subcates=[];
-}
-else{
-    $subcates = mysqli_fetch_all($result3, MYSQLI_ASSOC);
-}
+
 
 $sql4 = "SELECT `user_id` , `user_name` FROM `users`";
 $result4 = mysqli_query($conn, $sql4);
@@ -104,7 +97,7 @@ else{
                         <p class="menu-paragraph">Users</p>
                     </a>
                 </div>
-               <div class="menu-section">
+                <div class="menu-section">
                     <a href="stats.php"><img src="images/graph2 1.png" alt="Stats">
                         <p class="menu-paragraph">Stats</p>
                     </a>
@@ -154,33 +147,60 @@ echo"<form class='d-flex nav_btn' role='search'>
                         </div>
                         <div>
                             <label for="cate_id">category</label>
-                        <select name="cate_id" id="cate_id">
-                        <?php foreach($categories as $category): ?>
-                        <option value="<?=$category['category_id']?>"><?= $category['category_name']; ?></option>
-                        <?php endforeach;?>  
-                        </select>
+                            <select name="cate_id" id="cate_id" onchange="getSubCategory()">
+                                <?php foreach($categories as $category): ?>
+                                <option value="<?=$category['category_id']?>"><?= $category['category_name']; ?>
+                                </option>
+                                <?php endforeach;?>
+                            </select>
                         </div>
                         <div>
                             <label for="subcate_id">subcategory</label>
                             <select name="subcate_id" id="subcate_id">
-                            <?php foreach($subcates as $subcate):?>
-                            <option value="<?=$subcate['subcate_id']?>"><?=$subcate['subcate_name'];?></option>
-                            <?php endforeach;?>
+
                             </select>
-                            
+
                         </div>
+                        <script>
+                        function getSubCategory() {
+                            var cateId = document.getElementById('cate_id').value;
+                            var xhr = new XMLHttpRequest();
+                            xhr.open('GET', 'addproject.php?cateId=' + cateId, true);
+
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState == 4 && xhr.status == 200) {
+                                    document.getElementById('subcate_id').innerHTML = xhr.responseText;
+                                }
+                            };
+                            xhr.send();
+                        }
+
+                        <?php
+                            if (isset($_GET['cateId'])) {
+                                $sql3 = "SELECT `subcate_id` , `subcate_name` FROM `subcategories` WHERE `category_id` = {$_GET['cateId']}";
+                                $result3 = mysqli_query($conn, $sql3);
+                                if (!$result3) {
+                                    $subcates = [];
+                                } else {
+                                    $subcates = mysqli_fetch_all($result3, MYSQLI_ASSOC);
+                                }
+                            }
+                            ?>
+                        </script>
+
+
                         <div>
                             <label for="user_id">user</label>
                             <select name="user_id" id="user_id">
-                            <?php foreach($users as $user):?>
-                            <option value="<?=$user['user_id']?>"><?=$user['user_name'];?></option>
-                            <?php endforeach;?>
+                                <?php foreach($users as $user):?>
+                                <option value="<?=$user['user_id']?>"><?=$user['user_name'];?></option>
+                                <?php endforeach;?>
                             </select>
-                            
+
                         </div>
                         <div>
                             <label for="price">price</label>
-                        <input type=" number" placeholder="price" id="price" name="price">
+                            <input type=" number" placeholder="price" id="price" name="price">
                         </div>
                         <div class="form_submit">
                             <button type="submit" name="submit" id="submit">Submit</button>

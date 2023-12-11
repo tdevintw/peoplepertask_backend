@@ -10,11 +10,18 @@ if(!isset($_SESSION['valid_seesion'])){
 REQUIRE 'connection.php';
 
 if(isset($_GET['project_id'])){
-   $get_id =  $_GET['project_id'];
-   $get_tittle = $_GET['project_tittle'];
-   $get_descreption = $_GET['descreption'];
-   $get_price = $_GET['price'];
-}
+    $sql_fetch = "SELECT * FROM projects WHERE `project_id` = {$_GET['project_id']}";
+    $result4 = mysqli_query($conn, $sql_fetch);
+    if(!$result4){
+     echo "failed".mysqli_query_error();
+    }else{
+    $fetch = mysqli_fetch_assoc($result4);
+    }
+ 
+    $get_tittle = $fetch['project_tittle'];
+    $get_descreption = $fetch['descreption'];
+    $get_price = $fetch['price'];
+ }
 if(isset($_POST['submit'])){
     $tittle = $_POST['project_tittle'];
     $descreption = $_POST['descreption'];
@@ -28,7 +35,7 @@ if(isset($_POST['submit'])){
     $subcate_id2 = htmlspecialchars($subcate_id);
     $category_id2 = htmlspecialchars($category_id);
 
-    $sql = "UPDATE projects SET `project_tittle`='$tittle2' , `descreption`='$descreption2', `price`='$price2', `subcate_id`= '$subcate_id2' , `category_id`= '$category_id2' WHERE `project_id`='$get_id' ";
+    $sql = "UPDATE projects SET `project_tittle`='$tittle2' , `descreption`='$descreption2', `price`='$price2', `subcate_id`= '$subcate_id2' , `category_id`= '$category_id2' WHERE `project_id`= {$_GET['project_id']} ";
     $result = mysqli_query($conn , $sql);
     if($result){
         header("Location: projects.php?msg=UPDATED SUCCEFULY");

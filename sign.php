@@ -55,6 +55,7 @@ if(isset($_POST['submit2'])){
         if(password_verify($password_login,$fetch['password']) ){
             $username = $fetch['user_name'];
             $userid = $fetch['user_id'];
+            $role = $fetch['role'];
             echo $email;
             setcookie('user_name',$username,time()+200);
             $_SESSION['user_name']=$username;
@@ -62,12 +63,16 @@ if(isset($_POST['submit2'])){
             $_SESSION['valid_seesion_client']=1;
             setcookie('user_id',$userid,time()+200);
             $_SESSION['user_id']=$userid;
-            header("Location: clientdashboard.php?msg=Welcome back");
+            setcookie('role',$role,time()+200);
+            $_SESSION['role']=$role;
+            header("Location: dashboard.php?msg=Welcome back");
             }else if($fetch['role']=='freelancer'){
                 $_SESSION['valid_seesion_freelancer']=1;
                 setcookie('user_id',$userid,time()+200);
                 $_SESSION['user_id']=$userid;
-                header("Location: freelancerdashboard.php?msg=Welcome back");  
+                setcookie('role',$role,time()+200);
+                $_SESSION['role']=$role;
+                header("Location: dashboard.php?msg=Welcome back");  
             }else{
                 header("Location: loginadmin.php?msg=You are a admin re-enter you password and gmail to accces the dashboard");
             }

@@ -28,33 +28,25 @@ if($_GET['msg']=='you have already make a proposal to this project'){
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <title>PeoplePerTask</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <script>
     $(document).ready(function() {
-    $("#form1").on("input", function() {
-        var value = $(this).val().toLowerCase();
-        
-        $(".card-body h5").each(function() {
-            var projectTitle = $(this).text().toLowerCase();
-            var shouldShow = projectTitle.indexOf(value) > -1;
+        $("#form1").on("input", function() {
+            var searchTerm = $(this).val().toLowerCase();
 
-            // Show or hide the card based on the search result
-            var card = $(this).closest('.card');
-            card.toggle(shouldShow);
+            // Hide all projects
+            $(".col-md-4").hide();
 
-            // Move the card to the top if it matches the search
-            if (shouldShow) {
-                card.parent().prepend(card);
-            }
+            // Show projects whose title contains the search term
+            $(".col-md-4").each(function() {
+                var projectTitle = $(this).find(".card-body #tittle").text().toLowerCase();
+                if (projectTitle.includes(searchTerm)) {
+                    $(this).show();
+                }
+            });
         });
     });
-});
-
     </script>
-    <style>
-        .col-md-4 {
-    transition: all 0.3s ease; /* Add a transition for smoother changes */
-}
-    </style>
 </head>
 
 <body>
